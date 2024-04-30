@@ -6,4 +6,4 @@ npm run dev\
 cd ..\
 cd client\
 npm install\
-npm run dev\
+npm run dev
