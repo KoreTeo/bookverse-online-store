@@ -1,16 +1,34 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const path = require('path')
+require('dotenv').config()
+const express = require('express');
+const exphbs = require('express-handlebars');
+const app = express();
+const port = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+const cors = require('cors');
 
+// Database
+const db = require('./db');
 
-app.post('/api', (req, res) => {
-  console.log(req.body)
-  res.status(200).json({ result: req.body.text });
-})
+// Test DB
+db.authenticate()
+  .then(()=> console.log('Database connected'))
+  .catch((err) => console.log('Error: ' + err));
+
+app.use(cors());
+
+app.use('/product', require('./routes/productRouter'))
+
+app.use('/user', require('./routes/userRouter'))
+
+app.use('/order', require('./routes/orderRouter'))
+
+app.use('/cart', require('./routes/cartRouter'))
+
+app.use('/auth', require('./routes/authRouter'))
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Server started on port ${port}`)
 })
