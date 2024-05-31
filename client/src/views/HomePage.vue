@@ -1,5 +1,5 @@
 <script>
-import MainCompDiv from '../components/MainCompComp.vue';
+import MainCompDiv from '../components/MainComp.vue';
 import FooterDiv from '@/components/FooterDiv.vue';
 import HeaderDiv from '@/components/HeaderDiv.vue';
 export default {
@@ -14,13 +14,11 @@ export default {
 
 <template>
   <div className="main__main_page">
-    <HeaderDiv />
     <main className="main">
       <MainCompDiv />
       <MainCompDiv />
-      <MainCompDiv />
+      <MainCompDiv />             
     </main>
-    <FooterDiv />
   </div>
 </template>
 

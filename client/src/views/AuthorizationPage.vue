@@ -137,7 +137,7 @@
     line-height: 120%;
     color: #000;
     background: #d9d9d9;
-    align-self: center;
+    
     margin-top: 15px;
 }
 

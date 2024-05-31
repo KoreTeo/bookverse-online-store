@@ -3,44 +3,7 @@ import ArrowLeft from './img/ArrowLeft.vue';
 import ArrowRight from './img/ArrowRight.vue';
 import MainCompComp from './MainCompComp.vue';
 export default {
-  components: { ArrowLeft, ArrowRight, MainCompComp },
-  data() {
-    return {
-      cards: [MainCompComp, MainCompComp, MainCompComp, MainCompComp, MainCompComp, MainCompComp, MainCompComp],
-      innerStyles: {},
-      step: ''
-    }
-  },
-  mounted() {
-    this.setStep()
-  },
-  methods: {
-    setStep() {
-      const innerWidth = this.$refs.inner.scrollWidth // ❶
-      const totalCards = this.cards.length
-      this.step = `${innerWidth / totalCards}px` // ❷
-    },
-    next() {
-      this.moveLeft()
-      this.afterTransition(() => { // ❶
-        const card = this.cards.shift() // ❷
-        this.cards.push(card) // ❸
-      })
-    },
-    afterTransition(callback) {
-      const listener = () => { // ❹
-        callback()
-        this.$refs.inner.removeEventListener('transitionend', listener)
-      }
-      this.$refs.inner.addEventListener('transitionend', listener) // ❺
-    },
-
-    moveLeft() {
-      this.innerStyles = {
-        transform: `translateX(-${this.step})`
-      }
-    }
-  }
+  components: { ArrowLeft, ArrowRight, MainCompComp }
 }
 </script>
 <template>
@@ -50,8 +13,11 @@ export default {
       <button className="main__arrow" @click="next">
         <ArrowLeft />
       </button>
-      <ul className="main__list" v-for="card in cards" :key="card">
-        {{ card }}
+      <ul className="main__list">
+        <MainCompComp/>
+        <MainCompComp/>
+        <MainCompComp/>
+        <MainCompComp/>
       </ul>
       <button className="main__arrow" @click="next">
         <ArrowRight />
