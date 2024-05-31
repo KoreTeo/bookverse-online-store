@@ -14,13 +14,11 @@ export default {
 
 <template>
   <div className="main__main_page">
-    <HeaderDiv />
     <main className="main">
       <MainCompDiv />
       <MainCompDiv />
       <MainCompDiv />
     </main>
-    <FooterDiv />
   </div>
 </template>
 

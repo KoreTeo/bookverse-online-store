@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const Order = require('./orderModel')
 
 const User = db.define('user', {
   user_id: {
@@ -8,7 +9,7 @@ const User = db.define('user', {
     primaryKey: true,
     autoIncrement: true
   },
-  first_name: {
+  last_name: {
     type: Sequelize.STRING,
   },
   phone: {
@@ -26,7 +27,7 @@ const User = db.define('user', {
   is_admin: {
     type: Sequelize.BOOLEAN,
   },
-  last_name: {
+  first_name: {
     type: Sequelize.STRING,
   },
 })

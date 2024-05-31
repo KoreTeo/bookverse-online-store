@@ -1,13 +1,14 @@
 const path = require('path')
 require('dotenv').config()
 const express = require('express');
-const exphbs = require('express-handlebars');
 const app = express();
 const port = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
+require('./services/passport')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 const cors = require('cors');
+require("dotenv").config();
 
 // Database
 const db = require('./db');
@@ -32,3 +33,4 @@ app.use('/auth', require('./routes/authRouter'))
 app.listen(port, () => {
   console.log(`Server started on port ${port}`)
 })
+

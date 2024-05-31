@@ -10,6 +10,7 @@ import OrderInfoPage from '../views/OrderInfoPage.vue'
 import ProductInfoPage from '../views/ProductInfoPage.vue'
 import ProfileEditPage from '../views/ProfileEditPage.vue'
 import RegistrationPage from '../views/RegistrationPage.vue'
+import PageNotFound from '../views/PageNotFound.vue'
 
 
 const routes = [
@@ -68,6 +69,11 @@ const routes = [
     name: 'Registration',
     component: RegistrationPage,
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: '404',
+    component: PageNotFound,
+  }
 ]
 
 const router = new createRouter({
