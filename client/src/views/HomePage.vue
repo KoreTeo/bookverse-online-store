@@ -2,23 +2,36 @@
 import MainCompDiv from '../components/MainComp.vue';
 import FooterDiv from '@/components/FooterDiv.vue';
 import HeaderDiv from '@/components/HeaderDiv.vue';
+import axios from 'axios';
+
 export default {
   components: { MainCompDiv, HeaderDiv, FooterDiv },
   data() {
     return {
-      cards: [1, 2, 3, 4, 5, 6, 7, 8]
+      products: []
+    };
+  },
+  created() {
+    this.fetchProducts();
+  },
+  methods: {
+    async fetchProducts() {
+      try {
+        const response = await axios.get('http://localhost:3000/api/product/');
+        this.products = response.data.rows;
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
     }
   }
-}
+};
 </script>
 
 <template>
-  <div className="main__main_page">
-    <main className="main">
-      <MainCompDiv />
-      <MainCompDiv />
-      <MainCompDiv />             
-    </main>
+  <div class="main__main_page">
+      <MainCompDiv :products="products" />
+      <MainCompDiv :products="products" />
+      <MainCompDiv :products="products" />
   </div>
 </template>
 

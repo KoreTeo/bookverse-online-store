@@ -2,51 +2,96 @@
 import ArrowLeft from './img/ArrowLeft.vue';
 import ArrowRight from './img/ArrowRight.vue';
 import MainCompComp from './MainCompComp.vue';
+
 export default {
-  components: { ArrowLeft, ArrowRight, MainCompComp }
-}
+  components: { ArrowLeft, ArrowRight, MainCompComp },
+  props: {
+    products: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      currentPage: 1,
+      itemsPerPage: 4 // Number of items to show per page
+    };
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.products.length / this.itemsPerPage);
+    },
+    listStyle() {
+      const translateX = -(this.currentPage - 1) * (300 + 80) * this.itemsPerPage;
+      return {
+        transform: `translateX(${translateX}px)`
+      };
+    }
+  },
+  methods: {
+    next() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    prev() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    }
+  }
+};
 </script>
+
 <template>
-  <div className="main__all">
-    <p className="main__title">Новинки</p>
-    <div className="main__with_arrows">
-      <button className="main__arrow" @click="next">
+  <div class="main__all">
+    <p class="main__title">Новинки</p>
+    <div class="main__with_arrows">
+      <button class="main__arrow" @click="prev" :disabled="currentPage === 1">
         <ArrowLeft />
       </button>
-      <ul className="main__list">
-        <MainCompComp/>
-        <MainCompComp/>
-        <MainCompComp/>
-        <MainCompComp/>
-      </ul>
-      <button className="main__arrow" @click="next">
+      <div class="main__list-container">
+        <div class="main__list" :style="listStyle">
+          <MainCompComp v-for="product in products" :key="product.id" :product="product" />
+        </div>
+      </div>
+      <button class="main__arrow" @click="next" :disabled="currentPage === totalPages">
         <ArrowRight />
       </button>
     </div>
   </div>
 </template>
-<style>
-.inner {
-  transition: transform 0.2s;
-}
 
+<style>
 .main__with_arrows {
   display: flex;
+  align-items: center;
 }
 
 .main__arrow {
-  align-self: center;
-  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid lightblue;
   border-radius: 100px;
-  width: 16px;
-  height: 18px;
+  width: 30px;
+  height: 30px;
   padding-left: 4px;
+  background-color: lightcyan;
+  cursor: pointer;
+}
 
+.main__arrow:hover {
+  opacity: 0.7;
 }
 
 .main__arrow:active {
-  opacity: 0.8;
-  background-color: gray;
+  opacity: 0.5;
+}
+
+.main__arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .main__all {
@@ -61,12 +106,21 @@ export default {
   margin-bottom: 20px;
 }
 
-.main__list {
-  display: flex;
-  column-gap: 80px;
+.main__list-container {
   overflow: hidden;
+  width: calc(300px * 4 + 80px * 3);
+  /* Adjust the width to fit 4 items plus the gaps */
 }
 
+.main__list {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.main__list>* {
+  flex: 0 0 300px;
+  margin-right: 80px;
+}
 
 *,
 *::after,

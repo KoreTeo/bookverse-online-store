@@ -1,11 +1,23 @@
-const Cart = require('../models/cartModel')
+const {Cart, Cart_Details} = require('../models/models');
+const ApiError = require('../error/ApiError')
 
-const GetCart = (req, res) => {
-  Cart.findOne({ where: { cart_id: 1 } })
-    .then(cart => {
-      res.status(200).json(cart);
-    })
-    .catch((err) => console.log(err))
+class CartController {
+  async get(req, res) {
+    const {user} = req.body
+    const cart = await Cart.findOne({where:{userId: user.id}});
+    const cart_details = await Cart_Details.findAll({where:{cartId: cart.id}})
+    res.json(cart_details)
+  }
+  async addToCart(req, res) {
+    const {user, productId} = req.body
+    const cart = await Cart.findOne({where:{userId: user.id}});
+    const cart_details = await Cart_Details.create(
+      {
+        cartId: cart.id,
+        productId: productId
+      })
+    res.json(cart_details)
+  }
 }
 
-module.exports = GetCart;
+module.exports = new CartController();

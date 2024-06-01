@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios';
 import ProfileNavigationDiv from '../components/ProfileNavigation.vue';
+import router from '@/router';
 
 export default {
   components: { ProfileNavigationDiv },
@@ -11,8 +12,8 @@ export default {
         first_name: '',
         last_name: '',
         phone: '',
-        password: '',
-        passwordConfirm: ''
+        newpassword: '',
+        newpasswordConfirm: ''
       }
     };
   },
@@ -21,20 +22,22 @@ export default {
   },
   methods: {
     async fetchUserData() {
-      try {
-        const response = await axios.get('http://localhost:3000/user');
-        this.user = response.data;
-      } catch (error) {
-        console.error('Failed to fetch user data:', error);
-      }
+      const response = await axios.get('http://localhost:3000/api/user/data', { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } })
+        .then((res) =>
+          this.user = res.data
+        )
+        .catch((error) => {
+          console.error('Failed to fetch user data:', error);
+
+        })
     },
     async updateUserData() {
       try {
-        if (this.user.password !== this.user.passwordConfirm) {
+        if (this.user.newpassword !== this.user.newpasswordConfirm) {
           alert('Passwords do not match!');
           return;
         }
-        await axios.put('http://localhost:3000/user', this.user);
+        await axios.put('http://localhost:3000/api/user/edit', this.user, { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } });
         alert('User updated successfully!');
       } catch (error) {
         console.error('Failed to update user data:', error);
@@ -51,22 +54,23 @@ export default {
       <form class="auth__form" @submit.prevent="updateUserData">
         <label class="form__label" for="Email">E-mail</label>
         <input class="form__input" type="email" id="Email" v-model="user.email" placeholder="ro.rub@mail.ru">
-        
+
         <label class="form__label" for="Firstname">Имя</label>
         <input class="form__input" type="text" id="Firstname" v-model="user.first_name" placeholder="Роман">
-        
+
         <label class="form__label" for="Lastname">Фамилия</label>
         <input class="form__input" type="text" id="Lastname" v-model="user.last_name" placeholder="Рубцов">
-        
+
         <label class="form__label" for="Phone">Телефон</label>
         <input class="form__input" type="tel" id="Phone" v-model="user.phone" placeholder="+79130384577">
-        
+
         <label class="form__label" for="Password">Новый пароль</label>
-        <input class="form__input" type="password" id="Password" v-model="user.password" placeholder="••••••">
-        
+        <input class="form__input" type="password" id="Password" v-model="user.newpassword" placeholder="••••••">
+
         <label class="form__label" for="PasswordConfirm">Подтверждение нового пароля</label>
-        <input class="form__input" type="password" id="PasswordConfirm" v-model="user.passwordConfirm" placeholder="••••••">
-        
+        <input class="form__input" type="password" id="PasswordConfirm" v-model="user.newpasswordConfirm"
+          placeholder="••••••">
+
         <button class="form__button" type="submit">Сохранить</button>
       </form>
     </div>
@@ -153,11 +157,15 @@ export default {
   color: #fff;
   align-self: flex-end;
   margin-top: 15px;
-
+  cursor: pointer;
 }
 
 .form__button:hover {
-  opacity: 0.8;
+  opacity: 0.7;
+}
+
+.form__button:active {
+  opacity: 0.7;
 }
 
 

@@ -1,19 +1,26 @@
 <script>
 export default {
-
-}
+  props: {
+    product: {
+      type: Object,
+      required: true
+    }
+  }
+};
 </script>
+
 <template>
-  <li className="main__list_el">
-    <img src="./img/Book1.jpg" className="main__list_img">
-    <p className="main__list_book_name">Название книги</p>
-    <p className="main__list_book_author">Автор книги</p>
-    <div className="main__list_info">
-      <button className="main__list_btn" type="submit">В корзину</button>
-      <p className="main__list_cost">1000 руб.</p>
+  <li class="main__list_el">
+    <img :src="`http://localhost:3000/${product.img_link}`" class="main__list_img" :alt="product.name">
+    <p class="main__list_book_name">{{ product.name }}</p>
+    <p class="main__list_book_author">{{ product.author }}</p>
+    <div class="main__list_info">
+      <button class="main__list_btn" type="submit">В корзину</button>
+      <p class="main__list_cost">{{ product.price }} руб.</p>
     </div>
   </li>
 </template>
+
 <style>
 .main__list_el {
   width: 300px;
@@ -62,6 +69,15 @@ export default {
   width: 115px;
   height: 32px;
   border: none;
+  cursor: pointer;
+}
+
+.main__list_btn:hover{
+  opacity: 0.7;
+}
+
+.main__list_btn:active{
+  opacity: 0.5;
 }
 
 .main__list_cost {

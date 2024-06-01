@@ -1,34 +1,35 @@
-const path = require('path')
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
-const exphbs = require('express-handlebars');
-const app = express();
+const cors = require('cors'); 
+const path = require('path');
+const models = require('./models/models');
+const sequelize = require('./db');
+const fileUpload = require('express-fileupload');
+const router = require('./routers/router');
+const errorHandler = require('./middleware/ErrorHandlingMiddleware');
+
 const port = process.env.PORT || 3000;
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-const cors = require('cors');
-
-// Database
-const db = require('./db');
-
-// Test DB
-db.authenticate()
-  .then(()=> console.log('Database connected'))
-  .catch((err) => console.log('Error: ' + err));
-
+const app = express();
 app.use(cors());
+app.use(express.json());
+app.use(express.static(path.resolve(__dirname, 'static')));
+app.use(fileUpload({}));
+app.use('/api', router);
 
-app.use('/product', require('./routes/productRouter'))
 
-app.use('/user', require('./routes/userRouter'))
+app.use(errorHandler)
 
-app.use('/order', require('./routes/orderRouter'))
+const start = async() => {
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync();
+    app.listen(port, () => {
+      console.log(`Server started on port ${port}`)
+    });
+  }
+  catch (e) {
+    console.log(e);
+  }
+}
 
-app.use('/cart', require('./routes/cartRouter'))
-
-app.use('/auth', require('./routes/authRouter'))
-
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`)
-})
+start();
