@@ -22,13 +22,13 @@ export default {
   },
   methods: {
     async fetchUserData() {
-      const response = await axios.get('http://localhost:3000/user', { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } })
+      const response = await axios.get('http://localhost:3000/api/user/data', { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } })
         .then((res) =>
           this.user = res.data
         )
         .catch((error) => {
           console.error('Failed to fetch user data:', error);
-          router.replace({ path: '/' })
+
         })
     },
     async updateUserData() {
@@ -37,7 +37,7 @@ export default {
           alert('Passwords do not match!');
           return;
         }
-        await axios.put('http://localhost:3000/user', this.user, { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } });
+        await axios.put('http://localhost:3000/api/user/edit', this.user, { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } });
         alert('User updated successfully!');
       } catch (error) {
         console.error('Failed to update user data:', error);
@@ -157,11 +157,15 @@ export default {
   color: #fff;
   align-self: flex-end;
   margin-top: 15px;
-
+  cursor: pointer;
 }
 
 .form__button:hover {
-  opacity: 0.8;
+  opacity: 0.7;
+}
+
+.form__button:active {
+  opacity: 0.7;
 }
 
 

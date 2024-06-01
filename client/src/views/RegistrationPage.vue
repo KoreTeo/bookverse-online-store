@@ -15,7 +15,8 @@
       <label class="form__label" for="Password">Пароль<span class="reg_form__req">*</span></label>
       <input class="form__input" v-model="password" type="password" id="Password" placeholder="••••••" required>
       <label class="form__label" for="PasswordConfirm">Подтверждение пароля<span class="reg_form__req">*</span></label>
-      <input class="form__input" v-model="passwordConfirm" type="password" id="PasswordConfirm" placeholder="••••••" required>
+      <input class="form__input" v-model="passwordConfirm" type="password" id="PasswordConfirm" placeholder="••••••"
+        required>
       <button class="reg_form__button" type="submit">Зарегистрироваться</button>
     </form>
   </div>
@@ -45,16 +46,15 @@ export default {
       }
 
       try {
-        const response = await axios.post('http://localhost:3000/auth/registration', {
+        const response = await axios.post('http://localhost:3000/api/user/signup', {
           email: this.email,
           first_name: this.firstName,
           last_name: this.lastName,
           phone: this.phone,
           birthday: this.birthday,
           password: this.password,
-          isAdmin: false
+          role: "ADMIN"
         });
-        console.log(response.data);
         if (response.data.message) {
           alert(response.data.message);
         } else {
@@ -75,7 +75,6 @@ export default {
   flex-direction: column;
   width: 500px;
   margin: 0 auto;
-  margin-top: 100px;
 }
 
 .auth__main-title {
@@ -84,7 +83,6 @@ export default {
   line-height: 120%;
   color: #000;
   align-self: center;
-
   margin-bottom: 15px;
 }
 
@@ -102,8 +100,6 @@ export default {
   color: #000;
   margin-bottom: 5px;
   margin-top: 10px;
-
-
 }
 
 .form__input {
@@ -116,7 +112,6 @@ export default {
   height: 80px;
   align-self: center;
   margin-bottom: 25px;
-
 }
 
 .form__input::placeholder {
@@ -134,14 +129,19 @@ export default {
   font-weight: 300;
   font-size: 20px;
   line-height: 120%;
-  color: #000;
-  background: #d9d9d9;
+  color: #FFF;
+  background: #000aff;
   align-self: center;
   margin-top: 15px;
+  cursor: pointer;
 }
 
 .reg_form__button:hover {
-  opacity: 0.8;
+  opacity: 0.7;
+}
+
+.reg_form__button:active {
+  opacity: 0.5;
 }
 
 .reg_form__req {
