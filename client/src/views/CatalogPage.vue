@@ -4,9 +4,16 @@ import Arrow from '../components/img/Arrow.vue';
 import ArrowLeft from '../components/img/ArrowLeft.vue';
 import ArrowRight from '../components/img/ArrowRight.vue';
 import ArrowUP from '../components/img/ArrowUP.vue';
+import Checkbox from 'primevue/checkbox';
+
 
 export default {
-    components: { CatalogComp, Arrow, ArrowUP, ArrowLeft, ArrowRight }
+    components: { CatalogComp, Arrow, ArrowUP, ArrowLeft, ArrowRight, Checkbox },
+    data(){
+        return{
+            genre: null
+        };
+    }
 }
 </script>
 <template>
@@ -16,11 +23,11 @@ export default {
                 <h3 className="filters__title">Жанры</h3>
                 <ul className="filters__genre_list">
                     <li className="filters__genre_list_el">
-                        <input className="genre_list_el__chk" type="checkbox" name="genre" value="Fantasy">
-                        <label className="genre_list_el__label">Фэнтези</label>
+                        <Checkbox  v-model="genre" inputId="fantasy" name="genre" value="fantasy"/>
+                        <label for="fantasy" className="genre_list_el__label">Фэнтези</label>
                     </li>
                     <li className="filters__genre_list_el">
-                        <input className="genre_list_el__chk" type="checkbox" name="genre" value="Det">
+                        <input v-model="genre" className="genre_list_el__chk" type="checkbox" name="genre" value="Det">
                         <label className="genre_list_el__label">Детективы</label>
                     </li>
                     <li className="filters__genre_list_el">
@@ -47,9 +54,6 @@ export default {
                     <input className="filters__min_cost_input" placeholder="1000 ₽">
                     <p className="filters__defis">—</p>
                     <input className="filters__min_cost_input" placeholder="6585 ₽">
-                </div>
-                <div>
-
                 </div>
             </div>
             <div>
@@ -186,9 +190,8 @@ export default {
 .filters__genre_list_el {
     display: flex;
     column-gap: 12px;
-
-
 }
+
 
 .genre_list_el__label {
     font-weight: 400;
