@@ -60,6 +60,7 @@ export default {
         } else {
           alert('Registration successful');
         }
+        this.$router.push({ path: `/` })
       } catch (error) {
         console.error('There was an error!', error);
         alert('Failed to register. Please try again later.');

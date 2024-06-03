@@ -100,11 +100,7 @@ export default {
                 </li>
                 <li @click="redirectCart" className="list__el">
                     <div>
-                        <div>
-                            <CartSvg />
-                        </div>
-                        <div className="list__el_products_in_cart">{{cartstore.cart.length}}</div>
-                        <!тут должен быть скрипт смены числа книг в корзине>
+                        <CartSvg />
                     </div>
                     <div className="list__el_text">Корзина</div>
                 </li>
@@ -214,22 +210,5 @@ header {
 
 .list__el_text:hover {
     color: #0f00bd;
-}
-
-.list__el_products_in_cart {
-    width: 15px;
-    height: 15px;
-    font-weight: 400;
-    font-size: 11px;
-    position: absolute;
-    z-index: 1;
-    border: 2px solid #ffF;
-    border-radius: 100%;
-    background-color: #0f00bd;
-    color: #fff;
-    margin-top: -37px;
-    margin-left: 15px;
-    text-align: center;
-    align-content: center;
 }
 </style>
