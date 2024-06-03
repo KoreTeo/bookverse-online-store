@@ -83,7 +83,11 @@ export default {
 <style scoped>
 .main_profile {
   display: flex;
-  column-gap: 161px;
+  column-gap: 162px;
+  margin-top: 140px;
+  justify-content: space-between;
+  width: 1440px;
+  
 }
 
 .auth__main-container {

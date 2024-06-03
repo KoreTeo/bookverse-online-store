@@ -218,6 +218,7 @@ export default {
     column-gap: 12px;
 }
 
+
 .genre_list_el__label {
     font-weight: 400;
     font-size: 16px;
