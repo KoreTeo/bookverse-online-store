@@ -1,8 +1,40 @@
 <script>
 import ProfileNavigationDiv from '../components/ProfileNavigation.vue'
 import OrderUnitDiv from '../components/OrderUnit.vue';
+import axios from 'axios';
+
 export default {
-  components: { ProfileNavigationDiv, OrderUnitDiv }
+  components: { ProfileNavigationDiv, OrderUnitDiv },
+  data() {
+    return {
+      order: {},
+    };
+  },
+  created() {
+    this.fetchOrder();
+  },
+  methods: {
+    async fetchOrder() {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/order/${this.$route.params.id}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
+        }
+        );
+        this.order = response.data;
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    },
+    transformDate(order_date) {
+      let temp = order_date.split("T")[0].split("-").reverse();
+      return temp[1] + '.' + temp[0] + '.' + temp[2];
+    }
+  },
+  computed: {
+    countQuantity() {
+      return this.order.order_details.length
+    }
+  }
 }
 </script>
 <template>
@@ -11,33 +43,24 @@ export default {
     <div className="orders_page">
       <div className="orders_page__title">Страница заказа</div>
       <div className="orders_page__order">
-        <div className="orders_page__status">Выполнен</div>
-        <div className="orders_page__order_title">Заказ №54333434 от 21.04.2024</div>
+        <div className="orders_page__status">{{ order.status }}</div>
+        <div className="orders_page__order_title">Заказ №{{ order.id }} от {{ transformDate(order.order_date) }}</div>
         <div className="orders_page__extras">
           <div className="orders_page__extras_el">Оплата банковской картой</div>
           <div className="orders_page__extras_el">Доставка: Самовывоз</div>
         </div>
-        <div className="orders_page__extras_el">Адрес г. Красноярск, Красноясркий край, Россия</div>
+        <div className="orders_page__extras_el">Адрес: {{ order.ship_to }}</div>
       </div>
       <div className="orders_page__title">Состав заказа</div>
-      <OrderUnitDiv />
-      <OrderUnitDiv />
+      <OrderUnitDiv v-for="order_detail in order.order_details" :order_detail="order_detail"/>
       <ul className="orders_page__order_data">
         <li className="order_data__el">
           <div>Кол-во товаров:</div>
-          <div>2 штуки</div>
-        </li>
-        <li className="order_data__el">
-          <div>Общий вес:</div>
-          <div>1000 г</div>
-        </li>
-        <li className="order_data__el">
-          <div>Сумма НДС(20%):</div>
-          <div>243 руб.</div>
+          <div>{{ this.countQuantity }} штуки</div>
         </li>
         <li className="order_data__el">
           <div>Итог:</div>
-          <div>3243 руб.</div>
+          <div>{{ order.total }} руб.</div>
         </li>
       </ul>
     </div>
@@ -47,7 +70,6 @@ export default {
 .main_orders {
   display: flex;
   column-gap: 78px;
-  margin-top: 140px;
 }
 
 .orders_page__title {
@@ -103,7 +125,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 900px;
-  height: 341px;
+  height: 200px;
   padding: 49px 237px;
   row-gap: 37px;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);

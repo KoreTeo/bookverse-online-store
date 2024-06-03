@@ -3,8 +3,11 @@ const router = new express.Router;
 const productController = require('../controllers/productController');
 const checkRole = require('../middleware/checkRoleMiddleware')
 
-router.get('/', productController.getAll)
+router.post('/', productController.getAll)
 router.get('/:id', productController.getOne)
-router.post('/', checkRole('ADMIN'), productController.create)
+router.post('/category', productController.getCategory)
+router.put('/:id', checkRole('ADMIN'), productController.updateOne)
+router.delete('/:id', checkRole('ADMIN'), productController.deleteOne)
+router.post('/create', checkRole('ADMIN'), productController.create)
 
 module.exports = router;

@@ -1,9 +1,36 @@
+<script setup>
+</script>
+
 <script>
 import CartCompDiv from '../components/CartComp.vue';
 import TrashIcon from '../components/img/Trash.vue';
-export default {
-  components: { CartCompDiv, TrashIcon }
+import { useCartStore } from '../stores/cartStore.js';
 
+export default {
+  components: { CartCompDiv, TrashIcon },
+  setup() {
+    const cartstore = useCartStore();
+    return { cartstore };
+  },
+  data() {
+    return {
+      products: []
+    }
+  },
+  mounted() {
+    this.fetchProducts();
+  },
+  methods: {
+    redirectToMakeOrder() {
+      this.$router.push({ path: `/cart/order` })
+    },
+    clearCart() {
+      this.cartstore.clearCart();
+    },
+    fetchProducts() {
+      this.products = this.cartstore.cart
+    }
+  },
 }
 </script>
 <template>
@@ -11,43 +38,37 @@ export default {
     <div className="cart__left_part">
       <div className="cart__up_side">
         <p className="cart__title">Корзина</p>
-        <div className="cart__clean_trash">
+        <div @click="clearCart" className="cart__clean_trash">
           <div className="cart__trach_icon_title">
             <TrashIcon />
           </div>
           <p className="cart__trash_title">Очистить корзину</p>
         </div>
       </div>
-      <CartCompDiv />
-      <CartCompDiv />
+      <CartCompDiv v-for="product in products" :key="product.id" :product="product" />
     </div>
     <div className="cart__right_part">
       <ul className="cart__right_part_list">
         <li className="cart__right_part_list_el">
           <p className="cart__list_el_text">Кол-во товаров:</p>
-          <p className="cart__list_el_text">2 штуки</p>
+          <p className="cart__list_el_text">{{cartstore.totalQuantity}} штуки</p>
         </li>
         <li className="cart__right_part_list_el">
           <p className="cart__list_el_text">Общий вес:</p>
           <p className="cart__list_el_text">1000 г</p>
         </li>
         <li className="cart__right_part_list_el">
-          <p className="cart__list_el_text">Сумма НДС(20%):</p>
-          <p className="cart__list_el_text">243 руб.</p>
-        </li>
-        <li className="cart__right_part_list_el">
           <p className="cart__list_el_text">Итог:</p>
-          <p className="cart__list_el_text">3243 руб.</p>
+          <p className="cart__list_el_text">{{ cartstore.total }} руб.</p>
         </li>
       </ul>
-      <button className="cart__btn" type="submit">Оформить заказ</button>
+      <button @click="redirectToMakeOrder" className="cart__btn" type="submit">Оформить заказ</button>
     </div>
   </div>
 </template>
 <style>
 .main_page__cart {
   display: flex;
-  margin-top: 140px;
   column-gap: 90px;
 }
 
@@ -72,6 +93,7 @@ export default {
   display: flex;
   column-gap: 15px;
   align-items: center;
+  cursor: pointer;
 }
 
 .cart__trash_title {
@@ -81,6 +103,14 @@ export default {
   color: #1400ff;
 }
 
+.cart__clean_trash:hover {
+  opacity: 0.7;
+}
+
+.cart__clean_trash:active {
+  opacity: 0.5;
+}
+
 .cart__right_part {
   width: 790px;
   height: 452px;
@@ -88,6 +118,7 @@ export default {
   padding: 40px;
   display: flex;
   flex-direction: column;
+  gap: 30px;
 }
 
 .cart__right_part_list {
@@ -111,20 +142,25 @@ export default {
 .cart__btn {
   display: flex;
   font-weight: 400;
-  font-size: 30px;
+  font-size: 24px;
   line-height: 150%;
   border-radius: 20px;
   color: #fff;
-  width: 427px;
-  height: 96px;
+  width: 310px;
+  height: 60px;
   background: #1400ff;
   justify-content: center;
+  align-items: center;
   align-self: center;
-  padding-top: 22px;
+  cursor: pointer;
+}
+
+.cart__btn:hover {
+  opacity: 0.7;
 }
 
 .cart__btn:active {
-  opacity: 0.8;
+  opacity: 0.5;
 }
 
 

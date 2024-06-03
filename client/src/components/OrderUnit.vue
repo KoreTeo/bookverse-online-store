@@ -1,29 +1,62 @@
 <script>
-export default {
+import axios from 'axios';
 
+export default {
+  props: {
+    order_detail: {
+      type: Object,
+      required: true
+    },
+  },
+  data() {
+    return {
+      product: {},
+    };
+  },
+  created() {
+    this.fetchProduct();
+  },
+  methods: {
+    async fetchProduct() {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/product/${this.order_detail.productId}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
+        }
+        );
+        this.product = response.data;
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    },
+    transformDate(order_date) {
+      let temp = order_date.split("T")[0].split("-").reverse();
+      return temp[1] + '.' + temp[0] + '.' + temp[2];
+    }
+  },
+  computed: {
+    countQuantity() {
+      return 0
+    }
+  }
 }
 </script>
 <template>
   <div className="orders_page__order_content">
     <div className="order_content__left_part">
       <div>
-        <img src="./img/Book4.jpg" className="order_content__img">
+        <img :src="`http://localhost:3000/${product.img_link}`" className="order_content__img">
       </div>
       <div className="order_content__info">
-        <div className="order_content__info_title">Название данной книги</div>
-        <div className="order_content__info_author">Автор книги</div>
-        <div className="order_content__info_weight">
-          <div className="order_content__info_weight_title">Вес:</div>
-          <div className="order_content__info_weight_count">Какой-то</div>
-        </div>
+        <div className="order_content__info_title">{{product.name}}</div>
+        <div className="order_content__info_author">{{product.author}}</div>
       </div>
     </div>
     <div className="order_content__right_part">
       <div>
-        <div className="order_content__count">2</div>
+        <div className="order_content__count">{{this.order_detail.quantity}}</div>
         <div className="order_content__count_units">шт</div>
       </div>
-      <div className="order_content__cost">2000 ₽</div>
+      <div className="order_content__cost">{{this.order_detail.price}} ₽</div>
     </div>
   </div>
 </template>

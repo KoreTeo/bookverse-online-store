@@ -29,10 +29,9 @@ export default {
 </template>
 <style>
 footer {
-    border-top: 2px solid rgba(0, 0, 0, 0.5);
     width: 1440px;
     height: 100px;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: 0 -4px 4px 0 rgba(0, 0, 0, 0.25);
     background: #fff;
     margin: 0px 140px;
     padding: 0px 110px;

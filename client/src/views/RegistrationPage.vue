@@ -103,8 +103,7 @@ export default {
 }
 
 .form__input {
-  padding: 26px 0px;
-  padding-left: 31px;
+  padding: 26px 31px;
   border: none;
   background: #d9d9d9;
   border-radius: 20px;

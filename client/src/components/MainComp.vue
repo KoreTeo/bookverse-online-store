@@ -2,10 +2,18 @@
 import ArrowLeft from './img/ArrowLeft.vue';
 import ArrowRight from './img/ArrowRight.vue';
 import MainCompComp from './MainCompComp.vue';
+import { useProductStore } from '@/stores/productStore';
 
 export default {
   components: { ArrowLeft, ArrowRight, MainCompComp },
+  setup() {
+    const productstore = useProductStore();
+    return {productstore};
+  },
   props: {
+    title: String,
+    title: String,
+    title: String,
     products: {
       type: Array,
       required: true
@@ -22,7 +30,13 @@ export default {
       return Math.ceil(this.products.length / this.itemsPerPage);
     },
     listStyle() {
-      const translateX = -(this.currentPage - 1) * (300 + 80) * this.itemsPerPage;
+      let translateX;
+      if (this.currentPage === this.totalPages && (this.products.length % this.itemsPerPage) !== 0){
+        translateX = -(this.currentPage - 1) * (300 + 80) * (this.products.length % this.itemsPerPage);
+      }
+      else {
+        translateX = -(this.currentPage - 1) * (300 + 80) * this.itemsPerPage;
+      }
       return {
         transform: `translateX(${translateX}px)`
       };
@@ -38,14 +52,14 @@ export default {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
-    }
+    },
   }
 };
 </script>
 
 <template>
   <div class="main__all">
-    <p class="main__title">Новинки</p>
+    <p class="main__title">{{ this.title }}</p>
     <div class="main__with_arrows">
       <button class="main__arrow" @click="prev" :disabled="currentPage === 1">
         <ArrowLeft />
@@ -109,7 +123,6 @@ export default {
 .main__list-container {
   overflow: hidden;
   width: calc(300px * 4 + 80px * 3);
-  /* Adjust the width to fit 4 items plus the gaps */
 }
 
 .main__list {

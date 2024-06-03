@@ -1,3 +1,7 @@
+<script setup>
+import { useAuthorizedStore } from '../stores/isAuthorised';
+</script>
+
 <script>
 import ProfileSvg from './img/Profile.vue'
 import OrderSvg from './img/Order.vue'
@@ -5,19 +9,23 @@ import CartSvg from './img/Cart.vue'
 
 export default {
     components: { ProfileSvg, OrderSvg, CartSvg },
+    computed: {
+        store: () => useAuthorizedStore()
+    },
     methods: {
         redirectOrders() {
-            this.$router.push('/profile/orders')
+            this.$router.push('/profile/orders');
         },
         redirectCart() {
-            this.$router.push('/cart')
+            this.$router.push('/cart');
         },
         redirectEdit() {
-            this.$router.push('/profile/edit')
+            this.$router.push('/profile/edit');
         },
         logout() {
-            localStorage.clear()
-            this.$router.push('/')
+            localStorage.clear();
+            this.store.unauthorize();
+            this.$router.push('/');
         }
     }
 }
@@ -68,7 +76,7 @@ export default {
     opacity: 0.7;
 }
 
-.nav_panel__el:active{
+.nav_panel__el:active {
     opacity: 0.5;
 }
 

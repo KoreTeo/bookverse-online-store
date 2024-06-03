@@ -22,7 +22,10 @@ export default {
   },
   methods: {
     async fetchUserData() {
-      const response = await axios.get('http://localhost:3000/api/user/data', { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } })
+      const response = await axios.get('http://localhost:3000/api/user/data', {
+        headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
+      }
+      )
         .then((res) =>
           this.user = res.data
         )
@@ -77,11 +80,10 @@ export default {
   </div>
 </template>
 
-<style>
+<style scoped>
 .main_profile {
   display: flex;
   column-gap: 161px;
-  margin-top: 140px;
 }
 
 .auth__main-container {
@@ -109,14 +111,12 @@ export default {
 }
 
 .form__label {
-  font-weight: 300;
+  font-weight: 400;
   font-size: 24px;
   line-height: 120%;
   color: #000;
   margin-bottom: 5px;
   margin-top: 10px;
-
-
 }
 
 .form__input {

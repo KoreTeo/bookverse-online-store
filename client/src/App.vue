@@ -1,10 +1,14 @@
 <script setup>
 import HeaderDiv from './components/HeaderDiv.vue';
 import FooterDiv from './components/FooterDiv.vue';
+import {useCartStore} from './stores/cartStore.js';
+
+const cartStore = useCartStore();
+cartStore.fetchCartDetailsFromDB()
 </script>
 
 <template>
-    <HeaderDiv/>
+    <HeaderDiv />
     <main>
         <RouterView />
     </main>

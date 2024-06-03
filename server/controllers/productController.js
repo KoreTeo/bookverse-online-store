@@ -7,14 +7,12 @@ const ApiError = require('../error/ApiError');
 
 class ProductController {
   async getOne(req, res) {
-    const {id} = req.params;
-    const product = await Product.findOne({where: {id}})
+    const { id } = req.params;
+    const product = await Product.findOne({ where: { id } })
     res.json(product)
   }
   async getAll(req, res) {
-    let { category, genres, min_price, max_price, author, limit, page } = req.body
-    page = page || 1;
-    limit = limit || 10;
+    let { name, category, genres, min_price, max_price, author, page, limit } = req.body
     let offset = page * limit - limit
     let products;
 
@@ -26,12 +24,18 @@ class ProductController {
       whereClause[Op.and].push({ category: category });
     }
 
-    if (genres) {
-      whereClause[Op.and].push({ genre: { $in: genres } });
+    if (name) {
+      whereClause[Op.and].push({ name:  {[Op.iLike]: '%'+name+'%'} });
+    }
+
+    if(genres){
+      if (genres.length !== 0) {
+        whereClause[Op.and].push({ genre: { [Op.in]: genres } });
+      }
     }
 
     if (author) {
-      whereClause[Op.and].push({ author: author });
+      whereClause[Op.and].push({ author: {[Op.iLike]: '%'+author+'%'} });
     }
 
     if (min_price && max_price) {
@@ -46,6 +50,20 @@ class ProductController {
 
     return res.json(products)
   }
+  async getCategory(req, res, next) {
+    try {
+      let { category } = req.body
+      const products = await Product.findAll({
+        where: {
+          category: category
+        },
+      })
+      return res.json(products)
+    } catch (e) {
+      next(ApiError.badRequest(e.message))
+    }
+
+  }
   async create(req, res, next) {
     try {
       const { name, description, category, price, quantity_in_stock, genre, author, discontinued } = req.body
@@ -54,6 +72,30 @@ class ProductController {
       img.mv(path.resolve(__dirname, '..', 'static', filename))
       const product = await Product.create({ name, description, category, price, quantity_in_stock, genre, author, img_link: filename, discontinued })
       return res.json(product)
+    } catch (e) {
+      next(ApiError.badRequest(e.message))
+    }
+  }
+  async updateOne(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { name, description, category, price, quantity_in_stock, genre, author, discontinued } = req.body
+      const product = await Product.findOne({ where: { id } })
+      product.set({
+        name, description, category, price, quantity_in_stock, genre, author, discontinued
+      })
+      await product.save()
+      return res.json(product)
+    } catch (e) {
+      next(ApiError.badRequest(e.message))
+    }
+  }
+  async deleteOne(req, res, next) {
+    try {
+      const { id } = req.params;
+      const product = await Product.findOne({ where: { id } })
+      product.destroy();
+      return res.json({ message: `Продукт ${id} удален` })
     } catch (e) {
       next(ApiError.badRequest(e.message))
     }
