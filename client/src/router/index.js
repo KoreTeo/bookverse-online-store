@@ -12,6 +12,10 @@ import ProfileEditPage from '../views/ProfileEditPage.vue'
 import RegistrationPage from '../views/RegistrationPage.vue'
 import PageNotFound from '../views/PageNotFound.vue'
 
+function removeQueryParams(to) {
+  if (Object.keys(to.query).length)
+    return { path: to.path, query: {}, hash: to.hash }
+}
 
 const routes = [
   {

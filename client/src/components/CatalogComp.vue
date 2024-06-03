@@ -107,11 +107,14 @@ export default {
 }
 
 .info_about__description {
-    font-weight: 500;
+    width: 300px;
+    max-height: 156px;
+    font-weight: 400;
     font-size: 16px;
     line-height: 120%;
     text-align: justify;
-    color: rgba(0, 0, 0, 0.59);
+    color: rgba(0, 0, 0, 1);
+    overflow:hidden;
 }
 
 .info_about__list {

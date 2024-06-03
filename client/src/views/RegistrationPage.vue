@@ -53,7 +53,6 @@ export default {
           phone: this.phone,
           birthday: this.birthday,
           password: this.password,
-          role: "ADMIN"
         });
         if (response.data.message) {
           alert(response.data.message);
