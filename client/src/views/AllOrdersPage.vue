@@ -4,9 +4,32 @@ import OrderUnitDiv from '../components/OrderUnit.vue';
 import ArrowIcon from '../components/img/Arrow.vue'
 import ArrowUpIcon from '../components/img/ArrowUP.vue'
 import AllOrdersInfoDiv from '../components/OrderInfo.vue'
+import axios from 'axios';
+
 export default {
-  components: { ProfileNavigationDiv, OrderUnitDiv, ArrowIcon, ArrowUpIcon, AllOrdersInfoDiv }
-}
+  components: { ProfileNavigationDiv, OrderUnitDiv, ArrowIcon, ArrowUpIcon, AllOrdersInfoDiv },
+  data() {
+    return {
+      orders: [],
+    };
+  },
+  mounted() {
+    this.fetchOrders();
+  },
+  methods: {
+    async fetchOrders() {
+      try {
+        const response = await axios.get('http://localhost:3000/api/order', {
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
+        }
+        );
+        this.orders = response.data;
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    }
+  }
+};
 </script>
 <template>
   <div className="main_all_orders">
@@ -33,8 +56,7 @@ export default {
           </button>
         </li>
       </ul>
-      <AllOrdersInfoDiv />
-      <AllOrdersInfoDiv />
+      <AllOrdersInfoDiv v-for="order in orders" :order="order"/>
     </div>
   </div>
 </template>
@@ -42,7 +64,6 @@ export default {
 .main_all_orders {
   display: flex;
   column-gap: 162px;
-  margin-top: 140px;
 }
 
 .all_orders_page__title {

@@ -1,26 +1,40 @@
 <script>
+import ImageOrderInfo from '../components/ImageOrderInfo.vue'
+
 export default {
+  components: { ImageOrderInfo },
+  props: {
+    order: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {
+    redirectToOrderInfo(id) {
+      this.$router.push({ path: `/profile/orders/${id}` })
+    },
+    transformDate(date) {
+      let temp = date.split("T")[0].split("-").reverse();
+      temp[0] = temp.splice(1, 1, temp[0])[0];
+      return temp.join(".");
+    },
+  }
 }
 </script>
 <template>
-  <div className="all_orders_page__order">
-    <div className="all_orders_page__status">Выполнен</div>
-    <div className="all_orders_page__order_title">Заказ №54333434 от 21.04.2024</div>
+  <div @click="redirectToOrderInfo(order.id)" className="all_orders_page__order">
+    <div className="all_orders_page__status">{{ order.status }}</div>
+    <div className="all_orders_page__order_title">Заказ №{{ order.id }} от {{ transformDate(order.order_date) }}</div>
     <div className="all_orders_page__extras">
       <div className="all_orders_page__extras_el">Оплата банковской картой</div>
       <div className="all_orders_page__extras_el">Доставка: Самовывоз</div>
     </div>
-    <div className="all_orders_page__extras_el">Адрес г. Красноярск, Красноясркий край, Россия</div>
+    <div className="all_orders_page__extras_el">{{ order.ship_to }}</div>
     <div className="all_orders_page__bottom_info">
       <ul className="all_orders_page__images">
-        <li className="all_orders_page__images_el">
-          <img src="./img/Book4.jpg" className="all_order_content__img">
-        </li>
-        <li className="all_orders_page__images_el">
-          <img src="./img/Book4.jpg" className="all_order_content__img">
-        </li>
+        <ImageOrderInfo v-for="order_detail in order.order_details" :order_detail="order_detail" />
       </ul>
-      <div className="all_orders_page__order_cost">3243 руб.</div>
+      <div className="all_orders_page__order_cost">{{ order.total }} руб.</div>
     </div>
   </div>
 </template>
@@ -33,10 +47,15 @@ export default {
   border: 1px solid;
   padding: 22px 40px;
   margin-bottom: 50px;
+  cursor: pointer;
+}
+
+.all_orders_page__order:hover {
+  opacity: 0.7;
 }
 
 .all_orders_page__order:active {
-  opacity: 0.8;
+  opacity: 0.5;
 }
 
 .all_orders_page__status {
@@ -83,20 +102,12 @@ export default {
   margin-top: 42px;
 }
 
-.all_order_content__img {
-  width: 75px;
-  height: 102px;
-}
-
 .all_orders_page__order_cost {
   font-weight: 400;
   font-size: 20px;
   line-height: 120%;
   align-self: flex-end;
 }
-
-
-
 
 *,
 *::after,

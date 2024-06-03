@@ -50,14 +50,16 @@ const routes = [
     component: MakeOrderPage,
   },
   {
-    path: '/profile/orders/order',
+    path: '/profile/orders/:id',
     name: 'OrderInfo',
     component: OrderInfoPage,
+    props: true,
   },
   {
-    path: '/catalog/product',
+    path: '/catalog/product/:id',
     name: 'ProductInfo',
     component: ProductInfoPage,
+    props: true,
   },
   {
     path: '/profile/edit',

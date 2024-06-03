@@ -3,12 +3,17 @@ import MainCompDiv from '../components/MainComp.vue';
 import FooterDiv from '@/components/FooterDiv.vue';
 import HeaderDiv from '@/components/HeaderDiv.vue';
 import axios from 'axios';
+import { useProductStore } from '@/stores/productStore';
 
 export default {
   components: { MainCompDiv, HeaderDiv, FooterDiv },
+
   data() {
     return {
-      products: []
+      productsNew: [],
+      productsBest: [],
+      productsPre: [],
+      titles: ['Новинки', 'Бестселлеры', 'Предзаказы'],
     };
   },
   created() {
@@ -17,8 +22,26 @@ export default {
   methods: {
     async fetchProducts() {
       try {
-        const response = await axios.get('http://localhost:3000/api/product/');
-        this.products = response.data.rows;
+        const response = await axios.post('http://localhost:3000/api/product/category/', {
+          category: 'Новинки',
+        });
+        this.productsNew = response.data;
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+      try {
+        const response = await axios.post('http://localhost:3000/api/product/category/', {
+          category: 'Бестселлеры',
+        });
+        this.productsBest = response.data;
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+      try {
+        const response = await axios.post('http://localhost:3000/api/product/category/', {
+          category: 'Предзаказы',
+        });
+        this.productsPre = response.data;
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -29,9 +52,9 @@ export default {
 
 <template>
   <div class="main__main_page">
-      <MainCompDiv :products="products" />
-      <MainCompDiv :products="products" />
-      <MainCompDiv :products="products" />
+    <MainCompDiv :title="titles[0]" :products="productsNew" />
+    <MainCompDiv :title="titles[1]" :products="productsBest" />
+    <MainCompDiv :title="titles[2]" :products="productsPre" />
   </div>
 </template>
 

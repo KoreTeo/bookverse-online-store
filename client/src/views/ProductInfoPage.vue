@@ -1,42 +1,42 @@
 <script>
-import MainComp from '../components/MainComp.vue';
+import axios from 'axios';
+
 export default {
-    components: { MainComp }
+    data() {
+        return {
+            product: {},
+        };
+    },
+    created() {
+        this.fetchProduct();
+    },
+    methods: {
+        async fetchProduct() {
+            try {
+                const response = await axios.get(`http://localhost:3000/api/product/${this.$route.params.id}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
+                }
+                );
+                this.product = response.data;
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        }
+    },
 }
 </script>
 <template>
     <div className="book_info__main_container">
-        <ul className="book_info__head_list">
-            <li className="book_info__head_list_el">
-                <a href="#" className="head_list_el__text">Главная</a>
-                <div className="head_list_el__dash">—</div>
-            </li>
-            <li className="book_info__head_list_el">
-                <a href="#" className="head_list_el__text">Каталог</a>
-                <div className="head_list_el__dash">—</div>
-            </li>
-            <li className="book_info__head_list_el">
-                <a href="#" className="head_list_el__text">Новинки</a>
-                <div className="head_list_el__dash">—</div>
-            </li>
-            <li className="book_info__head_list_el">
-                <a href="#" className="head_list_el__text colored">Название книги</a>
-                <div className="head_list_el__dash last">—</div>
-            </li>
-        </ul>
-        <h1 className="main_container__title">Отношения. Визуальный гид по любви и дружбе из серии Чему не учат в школе
-            для подростков</h1>
+        <h1 className="main_container__title">{{product.name}}</h1>
         <div className="main_container__info">
-            <h3 className="main_container__author">Автор книги</h3>
+            <h3 className="main_container__author">{{product.author}}</h3>
             <div className="info">
                 <p className="info__text">Код товара:</p>
-                <p className="info__text_code">30040300R0</p>
+                <p className="info__text_code">{{product.id}}</p>
             </div>
         </div>
         <div className="main_container">
-            <div className="main_container__img">
-                <img src="./img/Book1.jpg" className="main_container__img">
-            </div>
+            <img :src="`http://localhost:3000/${product.img_link}`" className="main_container__img">
             <div className="main_container__book_info">
                 <div className="book_info__up">
                     <ul className="book_info__up_list">
@@ -63,7 +63,7 @@ export default {
                         <li className="book_info__up_list_el">
                             <p className="up_list_el__name">Автор:</p>
 
-                            <p className="up_list_el__type">Я сам её автор</p>
+                            <p className="up_list_el__type">{{product.author}}</p>
                         </li>
                         <li className="book_info__up_list_el">
                             <p className="up_list_el__name">Год издания:</p>
@@ -80,24 +80,15 @@ export default {
                     </div>
                 </div>
                 <p className="book_info__down">
-                    В современном обществе доминирует идея индивидуализма, но одиночество при этом часто воспринимается
-                    как личный провал. Мы обнаруживаем в себе стремление одновременно и к свободе, и к близости, что
-                    наглядно показал опыт изоляции во время пандемии. В своих эссе немецкий писатель и журналист Даниэль
-                    Шрайбер всматривается в этот кажущийся парадокс, обращаясь к трудам философов (от Аристотеля и
-                    Мишеля Фуко до Ханны Арендт и Жиля Делеза), художественной литературе (от Джейн Остин до Анни Эрно),
-                    актуальным исследованиям практикующих психотерапевтов и даже к популярным ситкомам. И приходит к
-                    дарящей надежду мысли, что выстраивание иерархий из моделей жизни, возможно, — не самая удачная идея
-                    и слову «одиночество» соответствуют не только темные тона.
+                    {{product.description}}
                 </p>
             </div>
         </div>
-        <MainComp />
     </div>
 </template>
 <style>
 .book_info__main_container {
     padding: 0px 140px;
-
 }
 
 .book_info__head_list {
@@ -142,6 +133,7 @@ export default {
 }
 
 .main_container {
+    width: 1440px;
     display: flex;
     justify-content: space-between;
     margin-bottom: 150px;
@@ -171,6 +163,7 @@ export default {
     width: 250px;
     height: 380px;
     margin-left: 50px;
+    display: block;
 }
 
 .main_container__book_info {

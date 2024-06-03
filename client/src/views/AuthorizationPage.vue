@@ -1,3 +1,7 @@
+<script setup>
+import { useAuthorizedStore } from '../stores/isAuthorised';
+</script>
+
 <script>
 import axios from 'axios';
 
@@ -8,6 +12,9 @@ export default {
       phone: '',
       password: ''
     };
+  },
+  computed: {
+    store: () => useAuthorizedStore()
   },
   methods: {
     async loginUser() {
@@ -21,6 +28,7 @@ export default {
         } else {
           alert('Login successful!');
           localStorage.setItem('authToken', response.data.token);
+          this.store.authorize();
           this.$router.push('/profile/edit')
         }
       } catch (error) {
@@ -45,7 +53,7 @@ export default {
         <label class="form__checkbox_label" for="Checkbox">Запомни меня</label>
       </div>
       <button class="auth__form__button" type="submit">Войти</button>
-      <RouterLink class="form__ref" to="/">Регистрация</RouterLink>
+      <RouterLink class="form__ref" to="/registration">Регистрация</RouterLink>
       <a class="form__ref" href="#">Забыли пароль?</a>
     </form>
   </div>

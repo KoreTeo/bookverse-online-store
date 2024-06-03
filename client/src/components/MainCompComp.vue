@@ -1,21 +1,54 @@
+<script setup>
+import { computed } from 'vue';
+import { useCartStore } from '../stores/cartStore.js';
+const cartstore = useCartStore();
+
+const props = defineProps({
+  product: {
+      type: Object
+    },
+})
+
+const isInCart = computed(() => {
+  return cartstore.cart.find(item => item.id === props.product.id)
+})
+
+function addToCart() {
+      cartstore.addToCart(props.product);
+}
+
+</script>
+
 <script>
+import { useCartStore } from '../stores/cartStore.js';
+
 export default {
   props: {
     product: {
       type: Object,
       required: true
+    },
+  },
+  methods: {
+    redirectToBookInfo() {
+      this.$router.push({ path: `/catalog/product/${this.product.id}` })
+    },
+    redirectToCart() {
+      this.$router.push({ path: `/cart` })
     }
-  }
+  },
 };
 </script>
 
 <template>
   <li class="main__list_el">
-    <img :src="`http://localhost:3000/${product.img_link}`" class="main__list_img" :alt="product.name">
-    <p class="main__list_book_name">{{ product.name }}</p>
+    <img :src="`http://localhost:3000/${product.img_link}`" @click="redirectToBookInfo" class="main__list_img"
+      :alt="product.name">
+    <p @click="redirectToBookInfo" class="main__list_book_name">{{ product.name }}</p>
     <p class="main__list_book_author">{{ product.author }}</p>
     <div class="main__list_info">
-      <button class="main__list_btn" type="submit">В корзину</button>
+      <button v-if="!isInCart" @click="addToCart" class="main__list_btn" type="button">Добавить</button>
+      <button v-else @click="redirectToCart" class="main__list_btn main__list_btn_delete" type="button">В корзину</button>
       <p class="main__list_cost">{{ product.price }} руб.</p>
     </div>
   </li>
@@ -28,12 +61,22 @@ export default {
   display: flex;
   flex-direction: column;
   padding: 0px 20px;
+  cursor: pointer;
 }
 
 .main__list_img {
   width: 200px;
   height: 296px;
   align-self: center;
+  cursor: pointer;
+}
+
+.main__list_img:hover {
+  opacity: 0.7;
+}
+
+.main__list_img:active {
+  opacity: 0.5;
 }
 
 .main__list_book_name {
@@ -42,7 +85,15 @@ export default {
   line-height: 120%;
   align-self: center;
   margin-top: 4px;
+  cursor: pointer;
+}
 
+.main__list_book_name:hover {
+  opacity: 0.7;
+}
+
+.main__list_book_name:active {
+  opacity: 0.5;
 }
 
 .main__list_book_author {
@@ -72,12 +123,17 @@ export default {
   cursor: pointer;
 }
 
-.main__list_btn:hover{
+.main__list_btn:hover {
   opacity: 0.7;
 }
 
-.main__list_btn:active{
+.main__list_btn:active {
   opacity: 0.5;
+}
+
+.main__list_btn_delete {
+  color: black;
+  background: lightblue;
 }
 
 .main__list_cost {

@@ -5,8 +5,40 @@ import CancelIcon from '../components/img/Cancel.vue';
 import DeliveryIcon from '../components/img/Delivery.vue';
 import WalletIcon from '../components/img/Wallet.vue';
 import ProfileIcon from '../components/img/Profile.vue';
+import axios from 'axios';
+import { useCartStore } from '../stores/cartStore'
 export default {
-    components: { SearchIcon, CancelIcon, MapIcon, DeliveryIcon, WalletIcon, ProfileIcon }
+    components: { SearchIcon, CancelIcon, MapIcon, DeliveryIcon, WalletIcon, ProfileIcon },
+    data() {
+        return {
+            location: '',
+            names: '',
+            email: '',
+            phone: '',
+        };
+    },
+    computed: {
+        cartstore: () => useCartStore()
+    },
+    methods: {
+        async makeOrder() {
+            try {
+                const response = await axios.post('http://localhost:3000/api/order',
+                    {
+                        ship_to: this.location,
+                        status: 'В обработке'
+                    },
+                    {
+                        headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
+                    }
+                )
+            } catch (error) {
+                console.error(error)
+            }
+            this.cartstore.clearCart();
+            this.$router.push({ path: `/profile/orders` })
+        },
+    }
 }
 </script>
 <template>
@@ -19,7 +51,7 @@ export default {
                     <p className="take_order__title">Населённый пункт (город, село)</p>
                 </div>
                 <label for="Location" className="take_order__label">Местоположение</label>
-                <input className="take_order__input_adress" id="Location"
+                <input v-model="location" className="take_order__input_adress" id="Location"
                     placeholder="г. Красноярск, Красноярский край, Россия">
                 <div className="take_order__search_icon">
                     <SearchIcon />
@@ -90,16 +122,18 @@ export default {
                     <ul className="reciver__list">
                         <li className="reciver__list_el">
                             <label className="take_order__label" for="FIO">ФИ</label>
-                            <input className="reciver__list_el_input" id="FIO" type="text" placeholder="Роман Рубцов">
+                            <input v-model="names" className="reciver__list_el_input" id="FIO" type="text"
+                                placeholder="Роман Рубцов">
                         </li>
                         <li className="reciver__list_el">
                             <label className="take_order__label" for="Email">E-mail</label>
-                            <input className="reciver__list_el_input" id="Email" type="email"
+                            <input v-model="email" className="reciver__list_el_input" id="Email" type="email"
                                 placeholder="ro.rub@mail.ru">
                         </li>
                         <li className="reciver__list_el">
                             <label className="take_order__label" for="Phone">Телефон</label>
-                            <input className="reciver__list_el_input" id="Phone" type="tel" placeholder="89130384577">
+                            <input v-model="phone" className="reciver__list_el_input" id="Phone" type="tel"
+                                placeholder="89130384577">
                         </li>
                     </ul>
                     <div className="reciver__comments">
@@ -113,7 +147,7 @@ export default {
         <ul className="order__info_panel">
             <li className="order__info_panel_el">
                 <p className="order__info_panel_el_text">Кол-во товаров:</p>
-                <p className="order__info_panel_el_text">2 штуки</p>
+                <p className="order__info_panel_el_text">{{ cartstore.totalQuantity }} штуки</p>
             </li>
             <li className="order__info_panel_el">
                 <p className="order__info_panel_el_text">Общий вес:</p>
@@ -129,9 +163,9 @@ export default {
             </li>
             <li className="order__info_panel_el">
                 <p className="order__info_panel_el_text">Итог:</p>
-                <p className="order__info_panel_el_text">3243 руб.</p>
+                <p className="order__info_panel_el_text">{{ cartstore.total }} руб.</p>
             </li>
-            <button className="order__info_panel_btn">Оформить заказ</button>
+            <button @click="makeOrder" className="order__info_panel_btn">Оформить заказ</button>
         </ul>
     </div>
 </template>
@@ -139,7 +173,6 @@ export default {
 .main_order {
     display: flex;
     column-gap: 67px;
-    margin-top: 80px;
 }
 
 .order__main_title {
@@ -322,20 +355,6 @@ export default {
     color: #000;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .order__info_panel {
     width: 526px;
     height: 496px;
@@ -368,10 +387,15 @@ export default {
     border-radius: 20px;
     width: 270px;
     height: 54px;
+    cursor: pointer;
+}
+
+.order__info_panel_btn:hover {
+    opacity: 0.7;
 }
 
 .order__info_panel_btn:active {
-    opacity: 0.8;
+    opacity: 0.5;
 }
 
 

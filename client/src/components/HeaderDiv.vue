@@ -1,3 +1,8 @@
+<script setup>
+import { useAuthorizedStore } from '../stores/isAuthorised';
+import { useCartStore } from '../stores/cartStore';
+</script>
+
 <script>
 import LogoSvg from './img/Logo.vue'
 import SearchSvg from './img/Search.vue'
@@ -8,6 +13,13 @@ import CartSvg from './img/Cart.vue'
 
 export default {
     components: { LogoSvg, SearchSvg, BurgerBtnSvg, ProfileSvg, OrderSvg, CartSvg },
+    computed: {
+        store: () => useAuthorizedStore(),
+        cartstore: () => useCartStore()
+    },
+    created() {
+        this.store.checkAuthorize();
+    },
     methods: {
         redirectHome() {
             this.$router.push('/')
@@ -19,7 +31,7 @@ export default {
             this.$router.push('/auth')
         },
         redirectProfile() {
-            if (this.isAuthenticated()) {
+            if (this.store.isAuthorized) {
                 this.$router.push('/profile/edit')
             }
             else {
@@ -27,7 +39,7 @@ export default {
             }
         },
         redirectOrders() {
-            if (this.isAuthenticated()) {
+            if (this.store.isAuthorized) {
                 this.$router.push('/profile/orders')
             }
             else {
@@ -35,21 +47,13 @@ export default {
             }
         },
         redirectCart() {
-            if (this.isAuthenticated()) {
+            if (this.store.isAuthorized) {
                 this.$router.push('/cart')
             }
             else {
                 this.$router.push('/auth')
             }
         },
-        isAuthenticated() {
-            if (localStorage.getItem('authToken')) {
-                return true
-            }
-            else {
-                return false
-            }
-        }
     }
 }
 </script>
@@ -63,12 +67,6 @@ export default {
             <div className="header__logo_name" @click="redirectHome">
                 <span className="logo_name__left">book</span>verse
             </div>
-            <div className="header__search">
-                <input type="text" placeholder="Найти любимую книгу" className="search__text">
-                <div className="search__icon">
-                    <SearchSvg />
-                </div>
-            </div>
         </div>
         <div className="header__right_part">
             <button @click="redirectCatalog" className="header__catalog_btn">
@@ -78,7 +76,7 @@ export default {
                 </div>
             </button>
             <ul className="left_part__list">
-                <li v-if="!isAuthenticated()" @click="redirectAuthorize" className="list__el">
+                <li v-if="!store.isAuthorized" @click="redirectAuthorize" className="list__el">
                     <div>
                         <ProfileSvg />
                     </div>
@@ -105,7 +103,7 @@ export default {
                         <div>
                             <CartSvg />
                         </div>
-                        <div className="list__el_products_in_cart">2</div>
+                        <div className="list__el_products_in_cart">{{cartstore.cart.length}}</div>
                         <!тут должен быть скрипт смены числа книг в корзине>
                     </div>
                     <div className="list__el_text">Корзина</div>
