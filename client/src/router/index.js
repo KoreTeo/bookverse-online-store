@@ -11,6 +11,8 @@ import ProductInfoPage from '../views/ProductInfoPage.vue'
 import ProfileEditPage from '../views/ProfileEditPage.vue'
 import RegistrationPage from '../views/RegistrationPage.vue'
 import PageNotFound from '../views/PageNotFound.vue'
+import PayPage from '@/views/PayPage.vue'
+import OrderDetails from '@/views/OrderDetails.vue'
 
 
 const routes = [
@@ -75,6 +77,16 @@ const routes = [
     path: '/:pathMatch(.*)*',
     name: '404',
     component: PageNotFound,
+  },
+  {
+    path: '/cart/order/pay',
+    name: 'PayPage',
+    component: PayPage,
+  },
+  {
+    path: '/admin/details',
+    name: 'OrderDetails',
+    component: OrderDetails,
   }
 ]
 

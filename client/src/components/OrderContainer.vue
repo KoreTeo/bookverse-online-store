@@ -1,16 +1,16 @@
 <script>
-import Edit from '@/components/img/Edit.vue';
 import CancelBtn from '@/components/img/CancelBtn.vue';
+import Arrow from '@/components/img/Arrow.vue';
+
 
     export default {
-        components: {Edit, CancelBtn},
-        
+        components: { CancelBtn, Arrow},
+        setup(){
+            const det = document.getElementById('details');
+        }
     }
 </script>
 <template>
-    <div className="edit_popup">
-        <button></button>
-    </div>
     <ul className="edit_container__product_list">
         <li className="edit_container__product_list_el">
             № 854858484455
@@ -25,10 +25,10 @@ import CancelBtn from '@/components/img/CancelBtn.vue';
             В пути
         </li>
         <li className="edit_container__product_list_el">
-        5000
+            5000
         </li>
         <li className="edit_container__product_list_el">
-            <a className="order_container__ref" href="#">Выдать заказ</a>
+            <a className="order_container__ref" href="#">Детали заказа</a>
         </li>
         <button className="product_list_el__trash_btn">
             <CancelBtn/>
@@ -36,6 +36,10 @@ import CancelBtn from '@/components/img/CancelBtn.vue';
     </ul>
 </template>
 <style>
+.details{
+    background: #F0F0F0;
+}
+
 .edit_popup{
     display: none;
     width: 300px;
@@ -109,6 +113,7 @@ margin-left: 10px;
 
 .order_container__ref{
     color: blue;
+    text-decoration: none;
 }
 .order_container__ref:hover{
     opacity: 0.8;
