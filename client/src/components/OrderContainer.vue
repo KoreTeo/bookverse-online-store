@@ -1,10 +1,14 @@
 <script>
-import Edit from '@/components/img/Edit.vue';
 import CancelBtn from '@/components/img/CancelBtn.vue';
+import Arrow from '@/components/img/Arrow.vue';
+
 import axios from 'axios';
 
 export default {
-    components: { Edit, CancelBtn },
+    components: { CancelBtn, Arrow, CancelBtn },
+    setup(){
+            const det = document.getElementById('details');
+    },
     props: {
         order: {}
     },
@@ -51,7 +55,7 @@ export default {
             {{ order.total }}
         </li>
         <li className="edit_container__product_list_el">
-            <a v-show="!toShow()" @click="changeStatus('Выдан')" className="order_container__ref">Выдать заказ</a>
+            <a className="order_container__ref" href="#">Детали заказа</a>
         </li>
         <button v-show="!toShow()" @click="changeStatus('Отменен')" className="product_list_el__trash_btn">
             <CancelBtn />
@@ -59,7 +63,11 @@ export default {
     </ul>
 </template>
 <style>
-.edit_popup {
+.details{
+    background: #F0F0F0;
+}
+
+.edit_popup{
     display: none;
     width: 300px;
     height: 300px;
