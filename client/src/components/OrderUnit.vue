@@ -31,7 +31,10 @@ export default {
     transformDate(order_date) {
       let temp = order_date.split("T")[0].split("-").reverse();
       return temp[1] + '.' + temp[0] + '.' + temp[2];
-    }
+    },
+    redirectToBookInfo() {
+      this.$router.push({ path: `/catalog/product/${this.product.id}` })
+    },
   },
   computed: {
     countQuantity() {
@@ -43,7 +46,7 @@ export default {
 <template>
   <div className="orders_page__order_content">
     <div className="order_content__left_part">
-      <div>
+      <div @click="redirectToBookInfo">
         <img :src="`http://localhost:3000/${product.img_link}`" className="order_content__img">
       </div>
       <div className="order_content__info">
@@ -85,6 +88,15 @@ export default {
 .order_content__img {
   width: 150px;
   height: 220px;
+  cursor: pointer;
+}
+
+.order_content__img:hover{
+  opacity: 0.7;
+}
+
+.order_content__img:hover{
+  opacity: 0.5;
 }
 
 .order_content__info_title {

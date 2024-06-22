@@ -574,11 +574,9 @@ export default {
   row-gap: 10px;
 }
 
-
-
 .admin_panel__edit_container {
   width: 1150px;
-  height: 600px;
+  min-height: 600px;
   background: #d9d9d9;
   padding: 20px 40px;
 }
@@ -597,7 +595,6 @@ export default {
   color: #000;
   width: 130px;
   text-align: center;
-
 }
 
 .admin_panel__right_container {

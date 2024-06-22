@@ -54,11 +54,6 @@ export default {
           birthday: this.birthday,
           password: this.password,
         });
-        if (response.data.message) {
-          alert(response.data.message);
-        } else {
-          alert('Registration successful');
-        }
         this.$router.push({ path: `/` })
       } catch (error) {
         console.error('There was an error!', error);

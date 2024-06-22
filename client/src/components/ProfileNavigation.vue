@@ -1,5 +1,6 @@
 <script setup>
 import { useAuthorizedStore } from '../stores/isAuthorised';
+import { useCartStore } from '@/stores/cartStore';
 </script>
 
 <script>
@@ -10,7 +11,8 @@ import CartSvg from './img/Cart.vue'
 export default {
     components: { ProfileSvg, OrderSvg, CartSvg },
     computed: {
-        store: () => useAuthorizedStore()
+        store: () => useAuthorizedStore(),
+        cartStore: () => useCartStore()
     },
     methods: {
         redirectOrders() {
@@ -25,6 +27,7 @@ export default {
         logout() {
             localStorage.clear();
             this.store.unauthorize();
+            this.cartStore.cart = [];
             this.$router.push('/');
         }
     }
