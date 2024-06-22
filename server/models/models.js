@@ -100,7 +100,7 @@ const Product = db.define('product', {
     allowNull: false,
   },
   description: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
   },
   category: {
     type: DataTypes.STRING,

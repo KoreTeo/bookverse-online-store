@@ -25,6 +25,7 @@ export const useCartStore = defineStore({
   actions: {
     async fetchCartDetailsFromDB() {
       try {
+        this.cart = [];
         const response = await axios.get('http://localhost:3000/api/cart', {
           headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
         })

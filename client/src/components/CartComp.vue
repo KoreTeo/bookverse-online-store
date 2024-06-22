@@ -10,7 +10,7 @@ export default {
       required: true
     }
   },
-  setup() {
+  mounted() {
     const cartstore = useCartStore();
     return { cartstore };
   },
@@ -31,13 +31,16 @@ export default {
        this.cartstore.changeQuantity(product)
       }
     },
+    redirectToBookInfo() {
+      this.$router.push({ path: `/catalog/product/${this.product.id}` })
+    },
   }
 }
 </script>
 <template>
   <div className="cart_page__cart_content">
     <div className="cart_content__left_part">
-      <div>
+      <div @click="redirectToBookInfo">
         <img :src="`http://localhost:3000/${product.img_link}`" className="cart_content__img">
       </div>
       <div className="cart_content__info">
@@ -112,6 +115,15 @@ export default {
 .cart_content__img {
   width: 150px;
   height: 220px;
+  cursor: pointer;
+}
+
+.cart_content__img:hover{
+  opacity: 0.7;
+}
+
+.cart_content__img:hover{
+  opacity: 0.5;
 }
 
 .cart_content__info_main_title {

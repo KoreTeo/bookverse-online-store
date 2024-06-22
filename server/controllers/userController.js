@@ -13,7 +13,7 @@ const generateJwt = (id, phone, role) => {
 
 class UserController {
   async signup(req, res, next) {
-    const { email, first_name, last_name, phone, birthday, password, role } = req.body
+    const { email, first_name, last_name, phone, birthday, password} = req.body
     if (!phone || !password) {
       return next(ApiError.badRequest('Некорректный ввод номера или пароля!'))
     }
@@ -22,7 +22,7 @@ class UserController {
       return next(ApiError.badRequest('Пользователь с таким номером уже существует'))
     }
     const hashPassword = await bcrypt.hash(password, 5)
-    const user = await User.create({ email, first_name, last_name, phone, birthday, phone, role, password: hashPassword })
+    const user = await User.create({ email, first_name, last_name, phone, birthday, phone, role: 'USER', password: hashPassword })
     const cart = await Cart.create({ userId: user.id })
     const token = generateJwt(user.id, user.phone, user.role)
     return res.json({message:"Успешная регистрация"})
@@ -39,6 +39,10 @@ class UserController {
     }
     const token = generateJwt(user.id, user.phone, user.role)
     return res.json({ token })
+  }
+  async checkAuthRole(req, res) {
+    const { user } = req.body;
+    return res.json({role: user.role})
   }
   async check(req, res, next) {
     const token = generateJwt(req.user.id, req.user.phone, req.user.role)

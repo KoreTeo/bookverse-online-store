@@ -1,6 +1,7 @@
 const { Product, Cart, Cart_Details, Order, Order_Details } = require('../models/models');
 const ApiError = require('../error/ApiError');
 const sequelize = require('../')
+const {Op} = require('sequelize')
 
 class OrderController {
   async create(req, res, next) {
@@ -26,6 +27,33 @@ class OrderController {
     })
     
     return res.json(order)
+  }
+  async getAdmin(req, res) {
+    let { number, min_cost, max_cost, status } = req.body
+    let orders;
+
+    let whereClause = {
+      [Op.and]: [],
+    };
+
+    if (number) {
+      whereClause[Op.and].push({ id: number });
+    }
+
+    if(status){
+      whereClause[Op.and].push({ status: status });
+    }
+
+    if (min_cost && max_cost) {
+      whereClause[Op.and].push({ total: { [Op.between]: [min_cost, max_cost] } });
+    }
+    orders = await Order.findAll({ 
+      where: whereClause,
+      order: [
+        ['order_date', 'DESC'],
+    ],
+     });
+    return res.json(orders)
   }
   async getAll(req, res) {
     const { user } = req.body;

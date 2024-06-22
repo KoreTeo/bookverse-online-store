@@ -1,5 +1,6 @@
 <script setup>
 import { useAuthorizedStore } from '../stores/isAuthorised';
+import { useCartStore } from '@/stores/cartStore';
 </script>
 
 <script>
@@ -14,7 +15,8 @@ export default {
     };
   },
   computed: {
-    store: () => useAuthorizedStore()
+    store: () => useAuthorizedStore(),
+    cartStore: () => useCartStore()
   },
   methods: {
     async loginUser() {
@@ -23,15 +25,12 @@ export default {
           phone: this.phone,
           password: this.password
         });
-        if (response.data.error) {
-          alert(response.data.error);
-        } else {
-          alert('Login successful!');
-          localStorage.setItem('authToken', response.data.token);
-          this.store.authorize();
-          this.$router.push('/profile/edit')
-        }
-      } catch (error) {
+        localStorage.setItem('authToken', response.data.token);
+        this.store.authorize();
+        this.cartStore.fetchCartDetailsFromDB();
+        this.$router.push('/profile/edit')
+      }
+      catch (error) {
         console.error('There was an error!', error);
         alert('Failed to login. Please try again later.');
       }

@@ -14,6 +14,10 @@ import PageNotFound from '../views/PageNotFound.vue'
 import PayPage from '@/views/PayPage.vue'
 import OrderDetails from '@/views/OrderDetails.vue'
 
+function removeQueryParams(to) {
+  if (Object.keys(to.query).length)
+    return { path: to.path, query: {}, hash: to.hash }
+}
 
 const routes = [
   {

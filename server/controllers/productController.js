@@ -12,8 +12,8 @@ class ProductController {
     res.json(product)
   }
   async getAll(req, res) {
-    let { name, category, genres, min_price, max_price, author, page, limit } = req.body
-    let offset = page * limit - limit
+    let { name, category, genre, genres, min_price, max_price, author, page, limit } = req.body
+    let offset = (page * limit - limit);
     let products;
 
     let whereClause = {
@@ -32,6 +32,10 @@ class ProductController {
       if (genres.length !== 0) {
         whereClause[Op.and].push({ genre: { [Op.in]: genres } });
       }
+    }
+
+    if(genre){
+      whereClause[Op.and].push({ genre: genre });
     }
 
     if (author) {
@@ -78,8 +82,7 @@ class ProductController {
   }
   async updateOne(req, res, next) {
     try {
-      const { id } = req.params;
-      const { name, description, category, price, quantity_in_stock, genre, author, discontinued } = req.body
+      const { id, name, description, category, price, quantity_in_stock, genre, author, discontinued } = req.body
       const product = await Product.findOne({ where: { id } })
       product.set({
         name, description, category, price, quantity_in_stock, genre, author, discontinued

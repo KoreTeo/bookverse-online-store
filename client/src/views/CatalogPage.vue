@@ -1,4 +1,5 @@
 <script>
+import { useCartStore } from '@/stores/cartStore';
 import CatalogComp from '../components/CatalogComp.vue';
 import Arrow from '../components/img/Arrow.vue';
 import ArrowLeft from '../components/img/ArrowLeft.vue';
@@ -23,6 +24,7 @@ export default {
     components: { CatalogComp, Arrow, ArrowUP, ArrowLeft, ArrowRight },
     mounted() {
         this.fetchProducts();
+        this.cartstore.fetchCartDetailsFromDB();
     },
     methods: {
         async fetchProducts(page = 1) {
@@ -50,6 +52,7 @@ export default {
         },
     },
     computed: {
+        cartstore: () => useCartStore(),
         totalPages() {
             return Math.ceil(this.totalProducts / this.limit);
         },
@@ -162,8 +165,6 @@ export default {
             <ul class="catalog__list">
                 <CatalogComp v-for="product in products" :key="product.id" :product="product" />
             </ul>
-            <button className="catalog__show_more" @click="changePage(currentPage + 1)"
-                :disabled="currentPage === totalPages">Показать ещё</button>
             <div className="catalog__paging">
                 <button class="catalog__paging_button" @click="changePage(currentPage - 1)"
                     :disabled="currentPage === 1">
@@ -381,36 +382,7 @@ export default {
     display: flex;
     flex-direction: column;
     row-gap: 80px;
-}
-
-.catalog__show_more {
-    margin-top: 80px;
     margin-bottom: 80px;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 120%;
-    color: #121212;
-    opacity: 1;
-    border-radius: 5px;
-    padding: 16px 384px;
-    width: 899px;
-    height: 69px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-    background: #f5f5f7;
-    cursor: pointer;
-}
-
-.catalog__show_more:hover {
-    opacity: 0.7;
-}
-
-.catalog__show_more:hover {
-    opacity: 0.5;
-}
-
-.catalog__show_more:disabled {
-    opacity: 0.4;
-    cursor: default;
 }
 
 .catalog__paging {

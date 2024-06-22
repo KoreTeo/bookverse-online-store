@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      itemsPerPage: 4 // Number of items to show per page
+      itemsPerPage: 4
     };
   },
   computed: {

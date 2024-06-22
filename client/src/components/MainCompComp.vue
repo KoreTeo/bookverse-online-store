@@ -1,12 +1,16 @@
 <script setup>
 import { computed } from 'vue';
+import {useRouter} from 'vue-router'
 import { useCartStore } from '../stores/cartStore.js';
+
 const cartstore = useCartStore();
+const router = useRouter()
+const authorizedStore = useAuthorizedStore();
 
 const props = defineProps({
   product: {
-      type: Object
-    },
+    type: Object
+  },
 })
 
 const isInCart = computed(() => {
@@ -14,13 +18,19 @@ const isInCart = computed(() => {
 })
 
 function addToCart() {
-      cartstore.addToCart(props.product);
+  authorizedStore.checkAuthorize()
+  if (authorizedStore.isAuthorized) {
+    cartstore.addToCart(props.product);
+  }
+  else {
+    router.push({ path: `/auth` })
+  }
 }
-
 </script>
 
 <script>
 import { useCartStore } from '../stores/cartStore.js';
+import { useAuthorizedStore } from '@/stores/isAuthorised.js';
 
 export default {
   props: {
@@ -48,7 +58,8 @@ export default {
     <p class="main__list_book_author">{{ product.author }}</p>
     <div class="main__list_info">
       <button v-if="!isInCart" @click="addToCart" class="main__list_btn" type="button">Добавить</button>
-      <button v-else @click="redirectToCart" class="main__list_btn main__list_btn_delete" type="button">В корзину</button>
+      <button v-else @click="redirectToCart" class="main__list_btn main__list_btn_delete" type="button">В
+        корзину</button>
       <p class="main__list_cost">{{ product.price }} руб.</p>
     </div>
   </li>
@@ -86,6 +97,7 @@ export default {
   align-self: center;
   margin-top: 4px;
   cursor: pointer;
+  text-align: center;
 }
 
 .main__list_book_name:hover {

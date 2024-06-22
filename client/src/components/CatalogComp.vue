@@ -1,7 +1,12 @@
 <script setup>
 import { computed } from 'vue';
 import { useCartStore } from '../stores/cartStore.js';
+import { useAuthorizedStore } from '@/stores/isAuthorised.js';
+import {useRouter} from 'vue-router'
+
 const cartstore = useCartStore();
+const authorizedStore = useAuthorizedStore();
+const router = useRouter();
 
 const props = defineProps({
     product: {
@@ -14,7 +19,13 @@ const isInCart = computed(() => {
 })
 
 function addToCart() {
-    cartstore.addToCart(props.product);
+    authorizedStore.checkAuthorize()
+    if (authorizedStore.isAuthorized) {
+        cartstore.addToCart(props.product);
+    }
+    else {
+        router.push({ path: `/auth` })
+    }
 }
 
 </script>
@@ -33,7 +44,7 @@ export default {
         },
         redirectToCart() {
             this.$router.push({ path: `/cart` })
-        }
+        },
     }
 }
 </script>
@@ -59,8 +70,10 @@ export default {
                 </ul>
                 <div className="info_about__extras">
                     <p className="info_about__cost">{{ product.price }} руб.</p>
-                    <button @click="addToCart" v-if="!isInCart" className="info_about__btn" type="button">Добавить</button>
-                    <button @click="redirectToCart" v-else className="info_about__btn info_about__btn_delete" type="button">В корзину</button>
+                    <button @click="addToCart" v-if="!isInCart" className="info_about__btn"
+                        type="button">Добавить</button>
+                    <button @click="redirectToCart" v-else className="info_about__btn info_about__btn_delete"
+                        type="button">В корзину</button>
                 </div>
             </div>
         </div>
@@ -107,11 +120,14 @@ export default {
 }
 
 .info_about__description {
-    font-weight: 500;
+    width: 300px;
+    max-height: 156px;
+    font-weight: 400;
     font-size: 16px;
     line-height: 120%;
     text-align: justify;
-    color: rgba(0, 0, 0, 0.59);
+    color: rgba(0, 0, 0, 1);
+    overflow: hidden;
 }
 
 .info_about__list {

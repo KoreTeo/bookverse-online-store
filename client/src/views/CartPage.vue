@@ -38,20 +38,21 @@ export default {
     <div className="cart__left_part">
       <div className="cart__up_side">
         <p className="cart__title">Корзина</p>
-        <div @click="clearCart" className="cart__clean_trash">
+        <div v-show="cartstore.cart.length > 0" @click="clearCart" className="cart__clean_trash">
           <div className="cart__trach_icon_title">
             <TrashIcon />
           </div>
           <p className="cart__trash_title">Очистить корзину</p>
         </div>
       </div>
-      <CartCompDiv v-for="product in products" :key="product.id" :product="product" />
+      <CartCompDiv v-show="cartstore.cart.length > 0" v-for="product in products" :key="product.id" :product="product" />
+      <p class="cart-empty-message" v-show="cartstore.cart.length === 0">Нет добавленных товаров</p>
     </div>
     <div className="cart__right_part">
       <ul className="cart__right_part_list">
         <li className="cart__right_part_list_el">
           <p className="cart__list_el_text">Кол-во товаров:</p>
-          <p className="cart__list_el_text">{{cartstore.totalQuantity}} штуки</p>
+          <p className="cart__list_el_text">{{ cartstore.totalQuantity }} штуки</p>
         </li>
         <li className="cart__right_part_list_el">
           <p className="cart__list_el_text">Общий вес:</p>
@@ -67,6 +68,10 @@ export default {
   </div>
 </template>
 <style>
+.cart-empty-message{
+  font-size: 24px;
+}
+
 .main_page__cart {
   display: flex;
   column-gap: 90px;
