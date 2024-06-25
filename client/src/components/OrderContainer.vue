@@ -2,8 +2,6 @@
 import CancelBtn from '@/components/img/CancelBtn.vue';
 import Arrow from '@/components/img/Arrow.vue';
 
-import axios from 'axios';
-
 export default {
     components: { CancelBtn, Arrow, CancelBtn },
     setup(){
@@ -13,27 +11,13 @@ export default {
         order: {}
     },
     methods: {
+        redirectToOrderDetails(){
+            this.$router.push(`admin/details/${this.order.id}`)
+        },
         transformDate(date) {
             let temp = date.split("T")[0].split("-").reverse();
             return temp[1] + '.' + temp[0] + '.' + temp[2];
         },
-        async changeStatus(newStatus) {
-            this.order.status = newStatus
-            try {
-                const response = await axios.put(`http://localhost:3000/api/order/${this.order.id}`, {
-                    status: newStatus,
-                },
-                    {
-                        headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
-                    });
-                this.orders = response.data;
-            } catch (error) {
-                console.error("Error fetching products:", error);
-            }
-        },
-        toShow(){
-            return (this.order.status === 'Выдан' || this.order.status === 'Отменен')
-        }
     }
 }
 </script>
@@ -55,11 +39,8 @@ export default {
             {{ order.total }}
         </li>
         <li className="edit_container__product_list_el">
-            <a className="order_container__ref" href="#">Детали заказа</a>
+            <a className="order_container__ref" @click="redirectToOrderDetails">Детали заказа</a>
         </li>
-        <button v-show="!toShow()" @click="changeStatus('Отменен')" className="product_list_el__trash_btn">
-            <CancelBtn />
-        </button>
     </ul>
 </template>
 <style>

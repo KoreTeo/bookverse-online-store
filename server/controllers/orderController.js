@@ -87,8 +87,28 @@ class OrderController {
       status: status,
     })
     await order.save()
-    return res.json(order)
-  }
+    if(status === 'Отправлен'){
+      setTimeout(async function(){
+        const order = await Order.findOne({
+          where: { id },
+        });
+        order.set({
+          status: 'Доставлен',
+        })
+        await order.save()
+        setTimeout(async function() {
+          const order = await Order.findOne({
+            where: { id },
+          });
+          order.set({
+            status: 'Получен',
+          })
+          await order.save()
+        }, 60000, id)
+      }, 60000, id)
+      return res.json(order)
+    }
+    }
 }
 
 module.exports = new OrderController();

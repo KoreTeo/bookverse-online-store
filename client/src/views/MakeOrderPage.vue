@@ -35,8 +35,8 @@ export default {
             } catch (error) {
                 console.error(error)
             }
+            this.$router.push(`/cart/order/pay/${response.data.id}`)
             this.cartstore.clearCart();
-            this.$router.push({ path: `/profile/orders` })
         },
     }
 }
@@ -52,7 +52,7 @@ export default {
                 </div>
                 <label for="Location" className="take_order__label">Местоположение</label>
                 <input v-model="location" className="take_order__input_adress" id="Location"
-                    placeholder="г. Красноярск, Красноярский край, Россия">
+                    placeholder="Введите адрес">
                 <div className="take_order__search_icon">
                     <SearchIcon />
                 </div>
@@ -123,23 +123,23 @@ export default {
                         <li className="reciver__list_el">
                             <label className="take_order__label" for="FIO">ФИ</label>
                             <input v-model="names" className="reciver__list_el_input" id="FIO" type="text"
-                                placeholder="Роман Рубцов">
+                                placeholder="Фамилия и имя получателя">
                         </li>
                         <li className="reciver__list_el">
                             <label className="take_order__label" for="Email">E-mail</label>
                             <input v-model="email" className="reciver__list_el_input" id="Email" type="email"
-                                placeholder="ro.rub@mail.ru">
+                                placeholder="example@email.com">
                         </li>
                         <li className="reciver__list_el">
                             <label className="take_order__label" for="Phone">Телефон</label>
                             <input v-model="phone" className="reciver__list_el_input" id="Phone" type="tel"
-                                placeholder="89130384577">
+                                placeholder="+79000000000">
                         </li>
                     </ul>
                     <div className="reciver__comments">
                         <label className="take_order__label" for="Comments">Комментарий к заказу</label>
                         <textarea className="reciver__textarea" id="Comments"
-                            placeholder="Калитка открывается с кодом 88005553535."></textarea>
+                            placeholder="Введите комментарий"></textarea>
                     </div>
                 </div>
             </div>

@@ -44,7 +44,7 @@ export default {
     <div class="auth__main-title">Авторизация</div>
     <form class="auth__form" @submit.prevent="loginUser">
       <label class="form__label" for="Phone">Введите ваш номер телефона</label>
-      <input class="form__input" v-model="phone" type="tel" id="Phone" placeholder="+79130384577">
+      <input class="form__input" v-model="phone" type="tel" id="Phone" placeholder="+79000000000">
       <label class="form__label" for="Password">Введите ваш пароль</label>
       <input class="form__input" v-model="password" type="password" id="Password" placeholder="••••••">
       <div class="form__checkbox_div">

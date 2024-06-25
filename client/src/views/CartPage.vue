@@ -27,6 +27,9 @@ export default {
     clearCart() {
       this.cartstore.clearCart();
     },
+    checkCart() {
+      return (this.cartstore.cart.length !== 0);
+    },
     fetchProducts() {
       this.products = this.cartstore.cart
     }
@@ -63,7 +66,7 @@ export default {
           <p className="cart__list_el_text">{{ cartstore.total }} руб.</p>
         </li>
       </ul>
-      <button @click="redirectToMakeOrder" className="cart__btn" type="submit">Оформить заказ</button>
+      <button v-if="checkCart()" @click="redirectToMakeOrder" className="cart__btn" type="submit">Оформить заказ</button>
     </div>
   </div>
 </template>
