@@ -100,6 +100,7 @@ export const useCartStore = defineStore({
             headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
           }
         )
+        return response.data
       } catch (error) {
         console.error(error)
       }

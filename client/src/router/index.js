@@ -14,11 +14,6 @@ import PageNotFound from '../views/PageNotFound.vue'
 import PayPage from '@/views/PayPage.vue'
 import OrderDetails from '@/views/OrderDetails.vue'
 
-function removeQueryParams(to) {
-  if (Object.keys(to.query).length)
-    return { path: to.path, query: {}, hash: to.hash }
-}
-
 const routes = [
   {
     path: '/admin',
@@ -83,15 +78,17 @@ const routes = [
     component: PageNotFound,
   },
   {
-    path: '/cart/order/pay',
+    path: '/cart/order/pay/:id',
     name: 'PayPage',
     component: PayPage,
+    props: true
   },
   {
-    path: '/admin/details',
+    path: '/admin/details/:id',
     name: 'OrderDetails',
     component: OrderDetails,
-  }
+    props: true,
+  },
 ]
 
 const router = new createRouter({

@@ -1,3 +1,27 @@
+<script setup>
+import { useCartStore } from '../stores/cartStore.js';
+
+const cartstore = useCartStore();
+
+function deleteFromCart(product) {
+  cartstore.removeFromCart(product)
+}
+function plusQuantity(product) {
+  product.quantity += 1;
+  cartstore.changeQuantity(product)
+}
+function minusQuantity(product) {
+  if (product.quantity === 1) {
+    cartstore.removeFromCart(product)
+  }
+  else {
+    product.quantity -= 1;
+    cartstore.changeQuantity(product)
+  }
+}
+
+</script>
+
 <script>
 import TrashIcon from './img/Trash.vue';
 import { useCartStore } from '../stores/cartStore.js';
@@ -10,27 +34,7 @@ export default {
       required: true
     }
   },
-  mounted() {
-    const cartstore = useCartStore();
-    return { cartstore };
-  },
   methods: {
-    deleteFromCart(product) {
-      this.cartstore.removeFromCart(product)
-    },
-    plusQuantity(product) {
-      product.quantity += 1;
-      this.cartstore.changeQuantity(product)
-    },
-    minusQuantity(product) {
-      if(product.quantity === 1) {
-        this.cartstore.removeFromCart(product)
-      }
-      else {
-        product.quantity -= 1;
-       this.cartstore.changeQuantity(product)
-      }
-    },
     redirectToBookInfo() {
       this.$router.push({ path: `/catalog/product/${this.product.id}` })
     },
@@ -83,7 +87,7 @@ export default {
         </div>
         <p className="cart_content__count_units">шт</p>
       </div>
-      <p className="cart_content__cost">{{product.price * product.quantity}} ₽</p>
+      <p className="cart_content__cost">{{ product.price * product.quantity }} ₽</p>
     </div>
     <div @click="deleteFromCart(product)" className="cart_content__trash">
       <TrashIcon />
@@ -118,11 +122,11 @@ export default {
   cursor: pointer;
 }
 
-.cart_content__img:hover{
+.cart_content__img:hover {
   opacity: 0.7;
 }
 
-.cart_content__img:hover{
+.cart_content__img:hover {
   opacity: 0.5;
 }
 

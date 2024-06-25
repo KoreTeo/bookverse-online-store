@@ -3,15 +3,15 @@
     <div class="auth__main-title">Регистрация</div>
     <form class="auth__form" @submit.prevent="registerUser">
       <label class="form__label" for="Email">E-mail<span class="reg_form__req">*</span></label>
-      <input class="form__input" v-model="email" type="email" id="Email" placeholder="ro.rub@mail.ru" required>
+      <input class="form__input" v-model="email" type="email" id="Email" placeholder="example@email.com" required>
       <label class="form__label" for="Firstname">Имя<span class="reg_form__req">*</span></label>
-      <input class="form__input" v-model="firstName" type="text" id="Firstname" placeholder="Роман" required>
+      <input class="form__input" v-model="firstName" type="text" id="Firstname" placeholder="Имя" required>
       <label class="form__label" for="Lastname">Фамилия<span class="reg_form__req">*</span></label>
-      <input class="form__input" v-model="lastName" type="text" id="Lastname" placeholder="Рубцов" required>
+      <input class="form__input" v-model="lastName" type="text" id="Lastname" placeholder="Фамилия" required>
       <label class="form__label" for="Phone">Телефон<span class="reg_form__req">*</span></label>
-      <input class="form__input" v-model="phone" type="tel" id="Phone" placeholder="+79130384577" required>
+      <input class="form__input" v-model="phone" type="tel" id="Phone" placeholder="+79000000000" required>
       <label class="form__label" for="BirthDate">Дата рождения<span class="reg_form__req">*</span></label>
-      <input class="form__input" v-model="birthday" type="date" id="BirthDate" placeholder="04.05.2004" required>
+      <input class="form__input" v-model="birthday" type="date" id="BirthDate" required>
       <label class="form__label" for="Password">Пароль<span class="reg_form__req">*</span></label>
       <input class="form__input" v-model="password" type="password" id="Password" placeholder="••••••" required>
       <label class="form__label" for="PasswordConfirm">Подтверждение пароля<span class="reg_form__req">*</span></label>
