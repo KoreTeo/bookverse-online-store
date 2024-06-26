@@ -21,7 +21,7 @@ export default {
 </script>
 <template>
     <h1 className="pay__header">Здесь должен быть платежный шлюз</h1>
-    <button @click="payOrder" className="pay__btn">Сафонов, оплатить!</button>
+    <button @click="payOrder" className="pay__btn">Совершить оплату</button>
 </template>
 <style>
 .pay__btn {

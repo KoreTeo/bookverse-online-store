@@ -1,7 +1,7 @@
 const { Product, Cart, Cart_Details, Order, Order_Details } = require('../models/models');
 const ApiError = require('../error/ApiError');
 const sequelize = require('../')
-const {Op} = require('sequelize')
+const { Op } = require('sequelize')
 
 class OrderController {
   async create(req, res, next) {
@@ -25,7 +25,17 @@ class OrderController {
       order.total = total;
       await order.save()
     })
-    
+    if (order.status === 'В обработке') {
+      console.log('first flag!!!')
+      setTimeout(async function () {
+        if(order.status === 'В обработке'){
+          console.log('second flag!!!')
+          order.set({
+            status: 'Отменен',
+          })
+          await order.save()
+        }
+      }, 300000, order.id)}
     return res.json(order)
   }
   async getAdmin(req, res) {
@@ -40,30 +50,30 @@ class OrderController {
       whereClause[Op.and].push({ id: number });
     }
 
-    if(status){
+    if (status) {
       whereClause[Op.and].push({ status: status });
     }
 
     if (min_cost && max_cost) {
       whereClause[Op.and].push({ total: { [Op.between]: [min_cost, max_cost] } });
     }
-    orders = await Order.findAll({ 
+    orders = await Order.findAll({
       where: whereClause,
       order: [
         ['order_date', 'DESC'],
-    ],
-     });
+      ],
+    });
     return res.json(orders)
   }
   async getAll(req, res) {
     const { user } = req.body;
-    const orders = await Order.findAll({ 
-      where: { userId: user.id }, 
+    const orders = await Order.findAll({
+      where: { userId: user.id },
       include: [{ model: Order_Details, as: 'order_details' }],
       order: [
         ['order_date', 'DESC'],
-    ],
-     });
+      ],
+    });
     return res.json(orders)
   }
   async getOne(req, res) {
@@ -74,7 +84,7 @@ class OrderController {
         include: [{ model: Order_Details, as: 'order_details' }]
       }
     );
-    
+
     return res.json(order)
   }
   async update(req, res) {
@@ -87,8 +97,8 @@ class OrderController {
       status: status,
     })
     await order.save()
-    if(status === 'Отправлен'){
-      setTimeout(async function(){
+    if (status === 'Отправлен') {
+      setTimeout(async function () {
         const order = await Order.findOne({
           where: { id },
         });
@@ -96,7 +106,7 @@ class OrderController {
           status: 'Доставлен',
         })
         await order.save()
-        setTimeout(async function() {
+        setTimeout(async function () {
           const order = await Order.findOne({
             where: { id },
           });
@@ -108,7 +118,7 @@ class OrderController {
       }, 60000, id)
       return res.json(order)
     }
-    }
+  }
 }
 
 module.exports = new OrderController();

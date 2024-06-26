@@ -130,7 +130,7 @@ export default {
     addImage(event) {
       this.addImageFile = event.target.files[0]
     },
-    ResetSearch() {
+     ResetSearch() {
       this.searchName = ''
       this.searchMinPrice = 0
       this.searchMaxPrice = 100000
@@ -159,6 +159,7 @@ export default {
       this.orderMinCost = 0
       this.orderMaxCost = 100000
       this.orderStatus = ''
+      this.fetchOrders();
     }
   }
 };
@@ -321,9 +322,9 @@ export default {
           <option selected="selected" value="">Все статусы</option>
           <option value="В обработке">В обработке</option>
           <option value="Оплачен">Оплачен</option>
-          <option value="В пути">В пути</option>
+          <option value="Отправлен">Отправлен</option>
           <option value="Доставлен">Доставлен</option>
-          <option value="Выдан">Выдан</option>
+          <option value="Получен">Получен</option>
           <option value="Отменен">Отменен</option>
         </select>
         <div class="button-container">

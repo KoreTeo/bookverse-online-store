@@ -32,10 +32,10 @@ export default {
                         headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
                     }
                 )
+                this.$router.push(`/cart/order/pay/${response.data.id}`)
             } catch (error) {
                 console.error(error)
             }
-            this.$router.push(`/cart/order/pay/${response.data.id}`)
             this.cartstore.clearCart();
         },
     }
